@@ -29,5 +29,5 @@ if __name__ == "__main__":
     lista = []
     for i in range(1, len(sys.argv)):
         lista.append(sys.argv[i])
-    # testowy wydruk     python lab_4_1.py PATH
+    # testowy wydruk     python lab_4_1.py WINDIR OS PATH
     print_env(get_env(), lista)
