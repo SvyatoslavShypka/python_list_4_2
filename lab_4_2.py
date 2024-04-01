@@ -22,6 +22,7 @@ def print_path(callback, needed_files):
         print(path)
         if needed_files:
             for p in path.iterdir():
+                # Sprawdzamy czy jest to plik i czy jest wykonywalny
                 if p.is_file() and p.stat().st_mode & 0o111:
                     # To plik, wywołujemy callback
                     callback(p)
