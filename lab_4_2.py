@@ -27,6 +27,7 @@ def print_path(callback, needed_files):
                     # To plik, wywołujemy callback
                     callback(p)
                     # set_extention.add(p.suffix)
+
     # print(set_extention)
 
 
