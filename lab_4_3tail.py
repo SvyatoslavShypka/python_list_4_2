@@ -76,7 +76,7 @@ if __name__ == "__main__":
     # python lab_4_3tail.py test.txt
     # cat inny_plik.txt | python lab_4_3tail.py test.txt
     #
-    # tail(args.file, args.lines, args.bytes)
+    tail(args.file, args.lines, args.bytes)
     #
     # logs = read_log()
     # # testowy wydruk     python lab_4_3tail.py < test.txt
