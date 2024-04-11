@@ -40,5 +40,6 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         if sys.argv[1].lower() == "files":
             needed_files = True
+    # testowy wydruk     python lab_4_2.py
     # testowy wydruk     python lab_4_2.py files
     print_path(visitfile, needed_files)
