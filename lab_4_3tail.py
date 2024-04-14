@@ -38,7 +38,7 @@ def tail(file, lines=None, bytes=None):
         sys.stdout.buffer.write(line.encode())
 
 
-class SimpleArgumentParser:
+class ArgumentCollector:
     def __init__(self):
         self.args = {}
 
@@ -54,7 +54,7 @@ class SimpleArgumentParser:
 
 
 if __name__ == "__main__":
-    parser = SimpleArgumentParser()
+    parser = ArgumentCollector()
     parser.add_argument(sys.argv)
     tail(parser.args.get("file"), parser.args.get("lines"), parser.args.get("bytes"))
     # test
