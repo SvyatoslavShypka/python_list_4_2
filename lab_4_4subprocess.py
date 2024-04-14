@@ -1,47 +1,54 @@
+import os
+import subprocess
 import sys
-import string
 from collections import Counter
 
-
-def statystyka():
-    sciezka = sys.stdin.readline()
+def run_statystyka(file_path):
     try:
-        with open(sciezka, 'r', encoding='utf-8') as f:
-            calyText = f.read()
-            # print("calyText: ", calyText)
-            znaki = len(calyText)
-            # print("znaki", znaki)
-            slowa = len(calyText.split())
-            # print("slowa", slowa)
-            linie = calyText.count('\n') + 1 # + ostatnia linia
-            # print("linie", linie)
-            LicznikZnakow = Counter(calyText)
-            # print(LicznikZnakow.items())
-            max_wystapien = 0
-            czestyZnak = None
-            for znak, wystapienia in LicznikZnakow.items():
-                if wystapienia > max_wystapien:
-                    max_wystapien = wystapienia
-                    czestyZnak = znak
-            # print("czestyZnak: '", czestyZnak, "' wystapienia", max_wystapien)
-            translator = str.maketrans('', '', string.punctuation)
-            words = calyText.translate(translator).lower().split()
-            word_count = Counter(words)
-            max_wystapien_slowo = 0
-            czesteSlowo = None
-            for slowo, wystapienia in word_count.items():
-                if wystapienia > max_wystapien_slowo:
-                    max_wystapien_slowo = wystapienia
-                    czesteSlowo = slowo
-            # print(czesteSlowo)
-            # Wyniki jako tsv
-            print(f"{sciezka}\t{znaki}\t{slowa}\t{linie}\t{czestyZnak}\t{czesteSlowo}", file=sys.stdout)
-    except FileNotFoundError:
-        print("Nie ma takiego pliku: ", sciezka)
+        process = subprocess.Popen(['python', 'lab_4_4plik.py'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf-8')
+        stdout, _ = process.communicate(input=file_path+'\n')
+        return stdout
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred: {e}")
         sys.exit(1)
 
+def process_output(output):
+    lines = output.strip().split('\n')
+    stats = {'files': len(lines)}
+    total_chars = 0
+    total_words = 0
+    total_lines = 0
+    char_counter = Counter()
+    word_counter = Counter()
+    for line in lines:
+        file_path, chars, words, lines, most_common_char, most_common_word = line.split('\t')
+        total_chars += int(chars)
+        total_words += int(words)
+        total_lines += int(lines)
+        char_counter[most_common_char] += 1
+        word_counter[most_common_word] += 1
+    stats['total_chars'] = total_chars
+    stats['total_words'] = total_words
+    stats['total_lines'] = total_lines
+    stats['most_common_char'] = char_counter.most_common(1)[0][0] if char_counter else None
+    stats['most_common_word'] = word_counter.most_common(1)[0][0] if word_counter else None
+    return stats
+
+def main(directory):
+    file_paths = [os.path.join(directory, file) for file in os.listdir(directory) if os.path.isfile(os.path.join(directory, file))]
+    output_list = []
+    for file_path in file_paths:
+        output = run_statystyka(file_path)
+        output_list.append(process_output(output))
+    return output_list
 
 if __name__ == "__main__":
-    statystyka()
+    if len(sys.argv) < 2:
+        print("Usage: python script.py directory_path")
+        sys.exit(1)
+    directory = sys.argv[1]
+    stats_list = main(directory)
+    for stats in stats_list:
+        print(stats)
     # test
-    # type sciezka.txt | python lab_4_4plik.py
+    # python lab_4_4subprocess.py C:\2\projects\Politech3\Python\python_list_4\TEST

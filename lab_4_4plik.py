@@ -4,7 +4,7 @@ from collections import Counter
 
 
 def statystyka():
-    sciezka = sys.stdin.readline()
+    sciezka = sys.stdin.readline().strip()
     try:
         with open(sciezka, 'r', encoding='utf-8') as f:
             calyText = f.read()
@@ -35,7 +35,7 @@ def statystyka():
                     czesteSlowo = slowo
             # print(czesteSlowo)
             # Wyniki jako tsv
-            print(f"{sciezka}\t{znaki}\t{slowa}\t{linie}\t{czestyZnak}\t{czesteSlowo}", file=sys.stdout)
+            print(f"{sciezka}\t{znaki}\t{slowa}\t{linie}\t{czestyZnak}\t{czesteSlowo}", end="", file=sys.stdout)
     except FileNotFoundError:
         print("Nie ma takiego pliku: ", sciezka)
         sys.exit(1)
