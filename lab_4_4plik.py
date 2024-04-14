@@ -45,18 +45,16 @@ class ArgumentCollector:
     def add_argument(self, argv):
         for i in range(1, len(argv)):
             if argv[i] != "<" and argv[i] != "type":
-                if argv[i].startswith("--lines"):
-                    self.args["lines"] = int(argv[i][8:])
-                elif argv[i].startswith("--bytes"):
-                    self.args["bytes"] = int(argv[i][8:])
-                else:
-                    self.args["file"] = argv[i]
+                self.args["file"] = argv[i]
 
 
 if __name__ == "__main__":
+    if len(sys.argv) <= 1:
+        print("Nie zadano ścieżki do pliku")
+        sys.exit(1)
     parser = ArgumentCollector()
     parser.add_argument(sys.argv)
-    tail(parser.args.get("file"), parser.args.get("lines"), parser.args.get("bytes"))
+    tail(parser.args.get("file"))
     # test
     # type test.txt | python lab_4_3tail.py --bytes=20
     # python lab_4_3tail.py test.txt --bytes=20

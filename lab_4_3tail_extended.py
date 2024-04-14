@@ -13,10 +13,11 @@ def tail(file, lines=None, bytes=None, follow=False):
                 byte_list_lines = f.readlines()
                 decoded = []
                 for line in byte_list_lines:
+                    # dekodujemy z bajtów w string
                     decoded.append(line.decode("utf-8"))
                 return decoded, f.tell()  # zwracamy lines_to_print i ostatnią pozycje w pliku
         except FileNotFoundError:
-            print("File not found:", file)
+            print("Nie ma takiego pliku: ", file)
             sys.exit(1)
 
     def print_new_lines(start_pos):
