@@ -39,15 +39,16 @@ def main():
     print("Available backups:")
     for i, backup in enumerate(backups, start=1):
         print(f"{i}. {backup[0]} - {backup[1]} - {backup[2]}")
-
-    choice = input("Wybierz numer backup'u: ")
-    try:
-        choice = int(choice)
-        if choice < 1 or choice > len(backups):
-            raise ValueError
-    except ValueError:
-        print("Invalid choice.")
-        sys.exit(1)
+    while True:
+        choice = input("Wybierz numer backup'u: ")
+        try:
+            choice = int(choice)
+            if choice < 1 or choice > len(backups):
+                raise ValueError
+            else:
+                break
+        except ValueError:
+            print("Invalid choice.")
 
     backup_file = backups[choice - 1][2]
     restore_backup(backup_file, restore_dir)
@@ -55,3 +56,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # test
+    # python restore.py

@@ -4,9 +4,10 @@ import csv
 from datetime import datetime
 
 
-def tworzymy_backup(directory):
-    # Sprawdź, czy zmienna środowiskowa BACKUPS_DIR jest ustawiona
-    backup_dir = os.getenv('BACKUPS_DIR', os.path.join(os.path.expanduser('~'), '.backups'))
+def tworzymy_backup(directory, backup_dir=None):
+    if backup_dir is None:
+        # Jeżeli w ENV jest zmienna BACKUPS_DIR używamy, inaczej C:\Users\<User>.backups
+        backup_dir = os.getenv('BACKUPS_DIR', os.path.join(os.path.expanduser('~'), '.backups'))
     if not os.path.exists(backup_dir):
         os.makedirs(backup_dir)
 
