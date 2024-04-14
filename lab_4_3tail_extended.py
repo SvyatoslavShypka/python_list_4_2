@@ -8,6 +8,7 @@ def tail(file, lines=None, bytes=None, follow=False):
 
     def read_file(start_pos):
         try:
+            # rb - read and binary mode
             with open(file, 'rb') as f:
                 f.seek(start_pos)
                 byte_list_lines = f.readlines()

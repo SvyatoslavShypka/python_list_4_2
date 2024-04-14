@@ -7,6 +7,7 @@ def tail(file, lines=None, bytes=None):
 
     if file:
         try:
+            # rb - read and binary mode
             with open(file, 'rb') as f:
                 if bytes is not None:
                     f.seek(-int(bytes), 2)
