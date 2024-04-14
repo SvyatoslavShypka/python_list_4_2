@@ -16,7 +16,7 @@ def restore_backup(backup_file, restore_dir):
     if not os.path.exists(restore_dir):
         os.makedirs(restore_dir)
     else:
-        # Usuń zawartość katalogu, jeśli istnieje
+        # Usuwamy zawartość katalogu, jeżeli istnieje
         for root, dirs, files in os.walk(restore_dir):
             for file in files:
                 os.remove(os.path.join(root, file))
@@ -29,9 +29,27 @@ def restore_backup(backup_file, restore_dir):
     print(f"Backup '{backup_file}' restored successfully to '{restore_dir}'.")
 
 
+class ArgumentCollector:
+    def __init__(self):
+        self.args = {}
+
+    def add_argument(self, argv):
+        for i in range(1, len(argv)):
+            if argv[i].startswith("BACKUPS_DIR"):
+                self.args["BACKUPS_DIR"] = argv[i][12:]
+            else:
+                self.args["RESTORE_DIR"] = argv[i]
+
+
 def main():
-    restore_dir = os.getcwd() if len(sys.argv) < 2 else sys.argv[1]
-    backups = common_tools.list_backups()
+    parser = ArgumentCollector()
+    parser.add_argument(sys.argv)
+    if parser.args.get("RESTORE_DIR"):
+        restore_dir = parser.args.get("RESTORE_DIR")
+    else:
+        # obecny folder
+        restore_dir = os.getcwd()
+    backups, backup_dir = common_tools.list_backups(parser.args.get("BACKUPS_DIR"))
     if not backups:
         print("Ni odnaleziono backups")
         sys.exit(0)
@@ -49,12 +67,12 @@ def main():
                 break
         except ValueError:
             print("Invalid choice.")
-
-    backup_file = backups[choice - 1][2]
+    backup_file = os.path.join(backup_dir, backups[choice - 1][2])
     restore_backup(backup_file, restore_dir)
 
 
 if __name__ == "__main__":
     main()
     # test
-    # python restore.py
+    # python restore.py C:\2\projects\Politech3\Python\python_list_4\FOLDER_TO_PACK
+    # python restore.py C:\2\projects\Politech3\Python\python_list_4\FOLDER_TO_PACK BACKUPS_DIR=C:\2\projects\Politech3\Python\python_list_4\TEST

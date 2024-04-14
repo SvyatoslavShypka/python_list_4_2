@@ -11,19 +11,19 @@ def tworzymy_backup(directory, backup_dir=None):
     if not os.path.exists(backup_dir):
         os.makedirs(backup_dir)
 
-    # Utwórz nazwę pliku zip na podstawie timestamp
+    # Nazwa pliku zip na podstawie timestamp
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
     backup_file = f"{timestamp}-{os.path.basename(directory)}.zip"
     backup_path = os.path.join(backup_dir, backup_file)
 
-    # Utwórz archiwum ZIP
+    # Tworzymy ZIP
     with zipfile.ZipFile(backup_path, 'w') as zipf:
         for root, dirs, files in os.walk(directory):
             for file in files:
                 file_path = os.path.join(root, file)
                 zipf.write(file_path, os.path.relpath(file_path, directory))
 
-    # Zaktualizuj plik CSV z historią kopii zapasowych
+    # Update CSV z historią kopii zapasowych
     history_file = os.path.join(backup_dir, 'backup_history.csv')
     header = ['Timestamp', 'Directory', 'Backup File']
     record = [timestamp, os.path.abspath(directory), backup_file]
@@ -40,8 +40,9 @@ def tworzymy_backup(directory, backup_dir=None):
     return backup_path
 
 
-def list_backups():
-    backup_dir = os.getenv('BACKUPS_DIR', os.path.join(os.path.expanduser('~'), '.backups'))
+def list_backups(backup_dir=None):
+    if backup_dir is None:
+        backup_dir = os.getenv('BACKUPS_DIR', os.path.join(os.path.expanduser('~'), '.backups'))
     history_file = os.path.join(backup_dir, 'backup_history.csv')
 
     backups = []
@@ -50,8 +51,7 @@ def list_backups():
 
     with open(history_file, 'r', newline='') as csvfile:
         reader = csv.reader(csvfile)
-        next(reader)  # Skip header
+        next(reader)  # Ignorujemy wiersz-tytuł
         for row in reader:
             backups.append(row)
-
-    return backups
+    return backups, backup_dir
