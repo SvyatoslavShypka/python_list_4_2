@@ -65,3 +65,4 @@ if __name__ == "__main__":
     # python lab_4_3tail.py test.txt --lines=2
     # python lab_4_3tail.py test.txt --lines=0
     # type test.txt | python lab_4_3tail.py --lines=2
+    # type another.txt | python lab_4_3tail.py test.txt

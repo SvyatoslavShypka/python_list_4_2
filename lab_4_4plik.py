@@ -7,10 +7,18 @@ def statystyka(file):
     if file:
         try:
             with open(file, 'r', encoding='utf-8') as f:
-                calyText = file.read()
+                calyText = f.read()
+                print("calyText: ", calyText)
                 znaki = len(calyText)
+                print("znaki", znaki)
                 slowa = len(calyText.split())
+                print("slowa", slowa)
                 linie = calyText.count('\n')
+                print("linie", linie)
+                LicznikZnakow = Counter(calyText)
+                czestyZnak = max(LicznikZnakow.items(), key=lambda x: x[1])[0]
+                print("czestyZnak", czestyZnak)
+
 
                 byteListLine = f.readlines()
                 decoded = []
